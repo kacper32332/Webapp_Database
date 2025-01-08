@@ -12,7 +12,6 @@ public class Adresy {
     }
 
     public Adresy(int nr_adresu, String miejscowosc, String ulica, String kod_pocztowy, String nr_domu, String nr_mieszkania) {
-        super();
         this.nr_adresu = nr_adresu;
         this.miejscowosc = miejscowosc;
         this.ulica = ulica;

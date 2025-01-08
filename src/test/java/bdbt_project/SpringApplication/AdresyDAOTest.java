@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -24,24 +23,28 @@ public class AdresyDAOTest {
     }
 
     @Test
-    void list() {
+    void testList() {
         List<Adresy> listAdresy = dao.list();
         assertTrue(listAdresy.isEmpty());
     }
 
     @Test
-    void save() {
+    void testSave() {
+        fail("Not yet implemented");
     }
 
     @Test
-    void get() {
+    void testGet() {
+        fail("Not yet implemented");
     }
 
     @Test
-    void update() {
+    void testUpdate() {
+        fail("Not yet implemented");
     }
 
     @Test
-    void delete() {
+    void testDelete() {
+        fail("Not yet implemented");
     }
 }
