@@ -8,6 +8,19 @@ public class Adresy {
     private String nr_domu;
     private String nr_mieszkania;
 
+    public Adresy() {
+    }
+
+    public Adresy(int nr_adresu, String miejscowosc, String ulica, String kod_pocztowy, String nr_domu, String nr_mieszkania) {
+        super();
+        this.nr_adresu = nr_adresu;
+        this.miejscowosc = miejscowosc;
+        this.ulica = ulica;
+        this.kod_pocztowy = kod_pocztowy;
+        this.nr_domu = nr_domu;
+        this.nr_mieszkania = nr_mieszkania;
+    }
+
     public int getNr_adresu() {
         return nr_adresu;
     }
@@ -65,16 +78,6 @@ public class Adresy {
     }
 
     public void setNr_mieszkania(String nr_mieszkania) {
-        this.nr_mieszkania = nr_mieszkania;
-    }
-
-    public Adresy(int nr_adresu, String miejscowosc, String ulica, String kod_pocztowy, String nr_domu, String nr_mieszkania) {
-        super();
-        this.nr_adresu = nr_adresu;
-        this.miejscowosc = miejscowosc;
-        this.ulica = ulica;
-        this.kod_pocztowy = kod_pocztowy;
-        this.nr_domu = nr_domu;
         this.nr_mieszkania = nr_mieszkania;
     }
 }

@@ -1,10 +1,15 @@
 package bdbt_project.SpringApplication;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class AdresyDAO {
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     public AdresyDAO(JdbcTemplate jdbcTemplate) {
@@ -13,7 +18,11 @@ public class AdresyDAO {
     }
 
     public List<Adresy> list(){
-        return null;
+        String sql = "SELECT * FROM adresy";
+
+        List<Adresy> listAdresy = jdbcTemplate.query(sql,
+                BeanPropertyRowMapper.newInstance(Adresy.class));
+        return listAdresy;
     }
 
     public void save(Adresy adresy){
