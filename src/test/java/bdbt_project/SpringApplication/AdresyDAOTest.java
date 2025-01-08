@@ -30,7 +30,8 @@ public class AdresyDAOTest {
 
     @Test
     void testSave() {
-        fail("Not yet implemented");
+        Adresy adresy = new Adresy(50, "Warszawa", "Marszałkowska", "00-000", "1", "1");
+        dao.save(adresy);
     }
 
     @Test

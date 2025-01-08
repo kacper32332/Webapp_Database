@@ -3,7 +3,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -32,6 +34,20 @@ public class AppController implements WebMvcConfigurer {
         model.addAttribute("listAdresy", listAdresy);
         return "index";
     }
+
+    @RequestMapping("/new")
+    public String showNewForm(Model model) {
+        Adresy adresy = new Adresy();
+        model.addAttribute("adresy", adresy);
+        return "new_form";
+    }
+
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public String save(@ModelAttribute("adresy") Adresy adresy) {
+        dao.save(adresy);
+        return "redirect:/";
+    }
+
 
     @Controller
     public class DashboardController

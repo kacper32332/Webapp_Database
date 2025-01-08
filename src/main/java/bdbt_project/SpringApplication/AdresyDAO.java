@@ -3,8 +3,11 @@ package bdbt_project.SpringApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.beans.BeanProperty;
 import java.util.List;
 
 @Repository
@@ -26,7 +29,11 @@ public class AdresyDAO {
     }
 
     public void save(Adresy adresy){
+        SimpleJdbcInsert insertActor = new SimpleJdbcInsert(jdbcTemplate);
+        insertActor.withTableName("adresy").usingColumns("miejscowosc", "ulica", "kod_pocztowy", "nr_domu", "nr_mieszkania");
 
+        BeanPropertySqlParameterSource param = new BeanPropertySqlParameterSource(adresy);
+        insertActor.execute(param);
     }
 
     public Adresy get(int nr_adresu){
