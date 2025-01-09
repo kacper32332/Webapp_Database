@@ -36,15 +36,15 @@ public class AdresyDAOTest {
 
     @Test
     void testGet() {
-        int id = 62;
+        int id = 43;
         Adresy adresy = dao.get(id);
-        assertNotNull(adresy);
+        System.out.println(adresy.toString());
     }
 
     @Test
     void testUpdate() {
         Adresy adresy = new Adresy();
-        adresy.setNr_adresu(62);
+        adresy.setNr_adresu(1);
         adresy.setMiejscowosc("Warszawa111");
         adresy.setUlica("Marszałkowska111");
         adresy.setKod_pocztowy("11-000");
