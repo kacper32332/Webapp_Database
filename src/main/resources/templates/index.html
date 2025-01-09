@@ -73,6 +73,8 @@
 
     <a href="/new">Dodaj nowy adres</a>
 
+    <br/><br/>
+
     <!-- Table -->
     <table border="1" cellpadding="10"> <!-- border – obramowanie, cellpadding – rozmiar komórki -->
         <!-- Table header -->
@@ -97,8 +99,9 @@
             <td th:text="${Adres.nr_domu}">Nr domu</td>
             <td th:text="${Adres.nr_mieszkania}">Nr mieszkania</td>
             <td>
-                <!-- Add any actions here, e.g., Edit or Delete buttons -->
-<!--                <button th:onclick="'delete/' + ${sale.id}">Delete</button>-->
+                <a th:href="@{'/edit/' + ${Adres.nr_adresu}}">Edit</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a th:href="@{'/delete/' + ${Adres.nr_adresu}}">Delete</a>
             </td>
         </tr>
         </tbody>

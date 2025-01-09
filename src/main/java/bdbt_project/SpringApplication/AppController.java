@@ -4,8 +4,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -48,6 +50,25 @@ public class AppController implements WebMvcConfigurer {
         return "redirect:/";
     }
 
+    @RequestMapping("/edit/{nr_adresu}")
+    public ModelAndView showEditForm(@PathVariable(name = "nr_adresu") int nr_adresu) {
+        ModelAndView mav = new ModelAndView("edit_form");
+        Adresy adresy = dao.get(nr_adresu);
+        mav.addObject("adresy", adresy);
+        return mav;
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public String update(@ModelAttribute("adresy") Adresy adresy) {
+        dao.update(adresy);
+        return "redirect:/";
+    }
+
+    @RequestMapping("/delete/{nr_adresu}")
+    public String delete(@PathVariable(name = "nr_adresu") int nr_adresu) {
+        dao.delete(nr_adresu);
+        return "redirect:/";
+    }
 
     @Controller
     public class DashboardController

@@ -36,16 +36,26 @@ public class AdresyDAOTest {
 
     @Test
     void testGet() {
-        fail("Not yet implemented");
+        int id = 62;
+        Adresy adresy = dao.get(id);
+        assertNotNull(adresy);
     }
 
     @Test
     void testUpdate() {
-        fail("Not yet implemented");
+        Adresy adresy = new Adresy();
+        adresy.setNr_adresu(62);
+        adresy.setMiejscowosc("Warszawa111");
+        adresy.setUlica("Marszałkowska111");
+        adresy.setKod_pocztowy("11-000");
+        adresy.setNr_domu("12");
+        adresy.setNr_mieszkania("12");
+        dao.update(adresy);
     }
 
     @Test
     void testDelete() {
-        fail("Not yet implemented");
+        int id = 62;
+        dao.delete(id);
     }
 }
