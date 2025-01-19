@@ -41,8 +41,16 @@
                     <a class="nav-link" th:href="@{/main}">Main</a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/main}">Login</a></a>
+                <!-- Show "Login" if the user is not logged in -->
+                <li class="nav-item" th:if="${#httpServletRequest.remoteUser == null}">
+                    <a class="nav-link" th:href="@{/login}">Login</a>
+                </li>
+
+                <!-- Show "You are logged in as <username>" if the user is logged in -->
+                <li class="nav-item" th:if="${#httpServletRequest.remoteUser != null}">
+                    <a class="nav-link" th:inline="text" style="color:lightskyblue;">
+                        You are logged in as <b style="text-transform:capitalize">[[${#httpServletRequest.remoteUser}]]</b>
+                    </a>
                 </li>
 
             </ul>
