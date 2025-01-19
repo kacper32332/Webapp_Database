@@ -53,6 +53,15 @@
                     </a>
                 </li>
 
+                <!-- Show "Logout" if the user is logged in -->
+
+                <li class="nav-item" th:if="${#httpServletRequest.remoteUser != null}">
+                    <form method="post" th:action="@{/index}">
+                    <button class="btn btn-primary" type="submit" onclick="successfullyLogout()" value="Sign Out">Logout</button>
+                    </form>
+                </li>
+
+
             </ul>
         </div>
     </div>
