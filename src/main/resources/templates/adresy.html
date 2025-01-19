@@ -2,6 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8"/>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <title>Adresy</title>
 
   <!-- Bootstrap CSS -->
@@ -111,10 +113,51 @@
   </div>
 </nav>
 
+<!-- Add New Entry Modal -->
+<div class="modal fade" id="addNewEntryModal" tabindex="-1" role="dialog" aria-labelledby="addNewEntryModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addNewEntryModalLabel">Dodaj nowy adres</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="addNewEntryForm">
+          <div class="form-group">
+            <label for="miejscowosc">Miejscowość</label>
+            <input type="text" class="form-control" id="miejscowosc" name="miejscowosc" required>
+          </div>
+          <div class="form-group">
+            <label for="ulica">Ulica</label>
+            <input type="text" class="form-control" id="ulica" name="ulica" required>
+          </div>
+          <div class="form-group">
+            <label for="kod_pocztowy">Kod Pocztowy</label>
+            <input type="text" class="form-control" id="kod_pocztowy" name="kod_pocztowy" required>
+          </div>
+          <div class="form-group">
+            <label for="nr_domu">Nr domu</label>
+            <input type="text" class="form-control" id="nr_domu" name="nr_domu" required>
+          </div>
+          <div class="form-group">
+            <label for="nr_mieszkania">Nr mieszkania</label>
+            <input type="text" class="form-control" id="nr_mieszkania" name="nr_mieszkania" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Zapisz</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container text-center">
   <h1>Adresy</h1>
 
-  <a href="/new" class="btn btn-success add-button">Dodaj nowy adres</a>
+<!--  <a href="/new" class="btn btn-success add-button">Dodaj nowy adres</a>-->
+  <a href="#" class="btn btn-success add-button" data-toggle="modal"
+     data-target="#addNewEntryModal">Dodaj nowy adres</a>
 
   <!-- Table -->
   <div class="table-responsive">
@@ -154,6 +197,32 @@
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script>
+  $(document).ready(function() {
+    $('#addNewEntryForm').on('submit', function(event) {
+      event.preventDefault();
 
+      // Get CSRF token from the meta tag
+      var csrfToken = $('meta[name="_csrf"]').attr('content');
+      var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
+      $.ajax({
+        url: '/save',
+        type: 'POST',
+        data: $(this).serialize(),
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader(csrfHeader, csrfToken);
+        },
+        success: function(response) {
+          $('#addNewEntryModal').modal('hide');
+          location.reload(); // Reload the page to see the new entry
+        },
+        error: function(error) {
+          console.error('Error:', error);
+        }
+      });
+    });
+  });
+</script>
 </body>
 </html>
