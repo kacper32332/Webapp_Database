@@ -85,45 +85,7 @@
     </div>
 </div>
 
-<div align="center">
-    <h1>Adresy</h1>
 
-    <a href="/new">Dodaj nowy adres</a>
-
-    <br/><br/>
-
-    <!-- Table -->
-    <table border="1" cellpadding="10"> <!-- border – obramowanie, cellpadding – rozmiar komórki -->
-        <!-- Table header -->
-        <thead>
-        <tr> <!-- Table row -->
-            <th>Nr adresu</th> <!-- Table column -->
-            <th>Miejscowosc</th>
-            <th>Ulica</th>
-            <th>Kod Pocztowy</th>
-            <th>Nr domu</th>
-            <th>Nr mieszkania</th>
-            <th>Edytuj</th>
-        </tr>
-        </thead>
-        <!-- Table body -->
-        <tbody>
-        <tr th:each="Adres : ${listAdresy}">
-            <td th:text="${Adres.nr_adresu}">ID</td>
-            <td th:text="${Adres.miejscowosc}">Miejscowosc</td>
-            <td th:text="${Adres.ulica}">Ulica</td>
-            <td th:text="${Adres.kod_pocztowy}">Kod Pocztowy</td>
-            <td th:text="${Adres.nr_domu}">Nr domu</td>
-            <td th:text="${Adres.nr_mieszkania}">Nr mieszkania</td>
-            <td>
-                <a th:href="@{'/edit/' + ${Adres.nr_adresu}}">Edit</a>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <a th:href="@{'/delete/' + ${Adres.nr_adresu}}">Delete</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
 
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>

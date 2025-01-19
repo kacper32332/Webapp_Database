@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Adresy</title>
+
+  <!-- Bootstrap CSS -->
+  <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css}"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+      padding-top: 56px; /* Space for fixed navbar */
+    }
+
+    h1 {
+      color: #007bff;
+      margin-bottom: 30px;
+    }
+
+    .navbar {
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .table {
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .table th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .table td, .table th {
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .btn-primary, .btn-danger {
+      font-size: 14px;
+      padding: 5px 10px;
+      margin: 2px;
+    }
+
+    .form-inline {
+      display: flex;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 1000px;
+    }
+
+    .add-button {
+      margin-bottom: 20px;
+    }
+
+    .logout-button {
+      border: none;
+      background: none;
+    }
+
+    .logout-button:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="/">BDBT Spring Boot Project - Part II</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+            aria-controls="navbarResponsive"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/main}">Main</a>
+        </li>
+
+        <!-- Show "Login" if the user is not logged in -->
+        <li class="nav-item" th:if="${#httpServletRequest.remoteUser == null}">
+          <a class="nav-link" th:href="@{/login}">Login</a>
+        </li>
+
+        <!-- Show "You are logged in as <username>" if the user is logged in -->
+        <li class="nav-item" th:if="${#httpServletRequest.remoteUser != null}">
+          <span class="nav-link text-light" th:inline="text">
+            You are logged in as <b style="text-transform:capitalize;">[[${#httpServletRequest.remoteUser}]]</b>
+          </span>
+        </li>
+
+        <!-- Show "Logout" if the user is logged in -->
+        <li class="nav-item" th:if="${#httpServletRequest.remoteUser != null}">
+          <form method="post" th:action="@{/logout}" class="form-inline">
+            <button class="logout-button text-light" type="submit">Logout</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container text-center">
+  <h1>Adresy</h1>
+
+  <a href="/new" class="btn btn-success add-button">Dodaj nowy adres</a>
+
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <!-- Table header -->
+      <thead class="thead-dark">
+      <tr>
+        <th>Nr adresu</th>
+        <th>Miejscowość</th>
+        <th>Ulica</th>
+        <th>Kod Pocztowy</th>
+        <th>Nr domu</th>
+        <th>Nr mieszkania</th>
+        <th>Akcje</th>
+      </tr>
+      </thead>
+      <!-- Table body -->
+      <tbody>
+      <tr th:each="Adres : ${listAdresy}">
+        <td th:text="${Adres.nr_adresu}">ID</td>
+        <td th:text="${Adres.miejscowosc}">Miejscowość</td>
+        <td th:text="${Adres.ulica}">Ulica</td>
+        <td th:text="${Adres.kod_pocztowy}">Kod Pocztowy</td>
+        <td th:text="${Adres.nr_domu}">Nr domu</td>
+        <td th:text="${Adres.nr_mieszkania}">Nr mieszkania</td>
+        <td>
+          <a th:href="@{'/edit/' + ${Adres.nr_adresu}}" class="btn btn-primary btn-sm">Edytuj</a>
+          <a th:href="@{'/delete/' + ${Adres.nr_adresu}}" class="btn btn-danger btn-sm">Usuń</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+</body>
+</html>

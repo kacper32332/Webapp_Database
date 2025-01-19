@@ -22,6 +22,7 @@ public class AppController implements WebMvcConfigurer {
         registry.addViewController("/").setViewName("index");
         registry.addViewController("/main").setViewName("main");
         registry.addViewController("/login").setViewName("login");
+        registry.addViewController("/adresy").setViewName("adresy");
 
         registry.addViewController("/main_admin").setViewName("admin/main_admin");
         registry.addViewController("/main_user").setViewName("user/main_user");
@@ -30,11 +31,11 @@ public class AppController implements WebMvcConfigurer {
     @Autowired
     private AdresyDAO dao;
 
-    @RequestMapping("/")
+    @RequestMapping("/adresy")
     public String viewHomePage(Model model) {
         List<Adresy> listAdresy = dao.list();
         model.addAttribute("listAdresy", listAdresy);
-        return "index";
+        return "adresy";
     }
 
     @RequestMapping("/new")
