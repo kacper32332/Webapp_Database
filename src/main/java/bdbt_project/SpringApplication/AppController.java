@@ -48,7 +48,7 @@ public class AppController implements WebMvcConfigurer {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String save(@ModelAttribute("adresy") Adresy adresy) {
         dao.save(adresy);
-        return "redirect:/";
+        return "redirect:/adresy";
     }
 
     @RequestMapping("/edit/{nr_adresu}")
@@ -62,13 +62,13 @@ public class AppController implements WebMvcConfigurer {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String update(@ModelAttribute("adresy") Adresy adresy) {
         dao.update(adresy);
-        return "redirect:/";
+        return "redirect:/adresy";
     }
 
     @RequestMapping("/delete/{nr_adresu}")
     public String delete(@PathVariable(name = "nr_adresu") int nr_adresu) {
         dao.delete(nr_adresu);
-        return "redirect:/";
+        return "redirect:/adresy";
     }
 
     @Controller
