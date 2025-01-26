@@ -3,10 +3,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -29,11 +26,11 @@ public class AppController implements WebMvcConfigurer {
     }
 
     @Autowired
-    private AdresyDAO dao;
+    private AdresyDAO AdresDAO;
 
     @RequestMapping("/adresy")
     public String viewHomePage(Model model) {
-        List<Adresy> listAdresy = dao.list();
+        List<Adresy> listAdresy = AdresDAO.list();
         model.addAttribute("listAdresy", listAdresy);
         return "adresy";
     }
@@ -47,27 +44,48 @@ public class AppController implements WebMvcConfigurer {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String save(@ModelAttribute("adresy") Adresy adresy) {
-        dao.save(adresy);
+        AdresDAO.save(adresy);
         return "redirect:/adresy";
     }
 
     @RequestMapping("/edit/{nr_adresu}")
     public ModelAndView showEditForm(@PathVariable(name = "nr_adresu") int nr_adresu) {
         ModelAndView mav = new ModelAndView("edit_form");
-        Adresy adresy = dao.get(nr_adresu);
+        Adresy adresy = AdresDAO.get(nr_adresu);
         mav.addObject("adresy", adresy);
         return mav;
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String update(@ModelAttribute("adresy") Adresy adresy) {
-        dao.update(adresy);
+    @RequestMapping(value = "/getAdres/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Adresy getAdres(@PathVariable("id") int id) {
+        return AdresDAO.get(id);
+    }
+
+//    @RequestMapping(value = "/update", method = RequestMethod.POST)
+//    public String update(@ModelAttribute("adresy") Adresy adresy) {
+//        AdresDAO.update(adresy);
+//        return "redirect:/adresy";
+//    }
+
+//    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+//    @ResponseBody
+//    public String update(@ModelAttribute("adresy") Adresy adresy) {
+//        AdresDAO.update(adresy);
+//        return "redirect:/adresy";
+//    }
+
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public String update(@PathVariable("id") int id, @ModelAttribute("adresy") Adresy adresy) {
+        adresy.setNr_adresu(id); // Ensure the ID is set in the object
+        AdresDAO.update(adresy);
         return "redirect:/adresy";
     }
 
     @RequestMapping("/delete/{nr_adresu}")
     public String delete(@PathVariable(name = "nr_adresu") int nr_adresu) {
-        dao.delete(nr_adresu);
+        AdresDAO.delete(nr_adresu);
         return "redirect:/adresy";
     }
 
