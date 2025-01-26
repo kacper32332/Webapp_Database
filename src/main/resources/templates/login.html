@@ -2,23 +2,118 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Login Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logowanie</title>
 
-    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css}"/>
     <style th:inline="text">
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            font-family: Arial, sans-serif;
+            background: url('[[@{/assets/background.png}]]') no-repeat center center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card h1 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
             color: #333;
-            background-color: #f8f9fa;
-            background-image: url('[[@{/assets/background.png}]]') no-repeat center center;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .form-control {
+            border-radius: 25px;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            border: 1px solid #ccc;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 25px;
+            font-size: 1rem;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .social-login a {
+            text-decoration: none;
+            color: white;
+            background-color: #3b5998;
+            padding: 10px 15px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-login a.google {
+            background-color: #db4437;
+        }
+
+        .social-login a.twitter {
+            background-color: #1da1f2;
+        }
+
+        .card-footer {
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .card-footer a {
+            color: #2575fc;
+            text-decoration: none;
+        }
+
+        .card-footer a:hover {
+            text-decoration: underline;
         }
 
         .navbar {
             background-color: #343a40;
             padding: 10px 20px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 10;
         }
 
         .navbar-brand {
@@ -37,105 +132,22 @@
             color: #ffd700 !important;
         }
 
-        .hero {
-            position: relative;
-            text-align: left;
-            color: white;
-            padding: 100px 20px;
-            background-image: url('[[@{/assets/background.png}]]') no-repeat center center;
-            background-size: cover;
+        .content {
+            margin-top: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 600px;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-        }
-
-        .hero .btn-primary {
-            background-color: #ffd700;
-            border-color: #ffd700;
-            color: black;
-            font-size: 1.2rem;
-            padding: 10px 30px;
-        }
-
-        .hero .btn-primary:hover {
-            background-color: white;
-            color: black;
-        }
-
-        .features {
-            padding: 50px 20px;
-            background-color: white;
-            text-align: center;
-        }
-
-        .features h2 {
-            font-size: 2.5rem;
-            margin-bottom: 30px;
-        }
-
-        .feature-item {
-            margin-bottom: 30px;
-        }
-
-        .feature-item img {
-            max-width: 100px;
+        .error-message {
+            color: red;
             margin-bottom: 15px;
-        }
-
-        .feature-item h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        .feature-item p {
-            font-size: 1rem;
-            color: #666;
-        }
-
-        footer {
-            background-color: #343a40;
-            color: white;
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        footer a {
-            color: #ffd700;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
     <div class="container">
@@ -163,41 +175,34 @@
     </div>
 </nav>
 
-
-<div class="container">
-
-    <div class="row">
-        <div class="col-md-4 mt-5">
-
-            <form method="post" th:action="@{/login}">
-
-                <div class="form-group">
-                    <label for="login">Nazwa użytkownika:</label>
-                    <input id="login" type="text" placeholder="Wprowadź nazwę użytkownika" autocomplete="off" class="form-control" name="username"/>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Hasło:</label>
-                    <input id="password" type="password" placeholder="Wprowadź hasło" autocomplete="off" class="form-control" name="password"/>
-                </div>
-
-                <div th:if="${param.error}" style="color:red; margin-bottom:15px">
-                    BŁĄD: Nieprawidłowa nazwa użytkownika lub hasło!
-                </div>
-
-                <button class="btn btn-primary" type="submit" value="Sign In">Zaloguj się</button>
-            </form>
-
-
-
+<div class="content">
+    <div class="card">
+        <h1>Login</h1>
+        <div th:if="${param.error}" class="error-message">
+            BŁĄD: Nieprawidłowa nazwa użytkownika lub hasło!
+        </div>
+        <form method="post" th:action="@{/login}">
+            <div class="form-group">
+                <label for="username">Nazwa Użytkownika</label>
+                <input type="text" id="username" name="username" placeholder="Type your username" class="form-control" required/>
+            </div>
+            <div class="form-group">
+                <label for="password">Hasło</label>
+                <input type="password" id="password" name="password" placeholder="Type your password" class="form-control" required/>
+            </div>
+            <div class="form-group text-right">
+                <a href="#" style="font-size: 0.9rem; color: #2575fc;">Zapomniałeś hasła?</a>
+            </div>
+            <button type="submit" class="btn btn-primary">ZALOGUJ SIĘ</button>
+        </form>
+        <div class="card-footer">
+            <p>lub <a th:href="@{/login}">Zarejestruj się</a></p>
         </div>
     </div>
 </div>
 
-
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-
 </body>
 </html>
