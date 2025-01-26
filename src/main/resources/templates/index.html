@@ -1,28 +1,148 @@
 <!DOCTYPE HTML>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Welcome Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klub Lekkoatletyczny</title>
 
-    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+    <!-- Bootstrap CSS -->
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css}"/>
 
+
+    <style th:inline="text">
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f8f9fa;
+            background-image: url('[[@{/assets/background.png}]]') no-repeat center center;
+        }
+
+        .navbar {
+            background-color: #343a40;
+            padding: 10px 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-link {
+            color: white !important;
+            font-size: 1rem;
+            margin: 0 10px;
+        }
+
+        .nav-link:hover {
+            color: #ffd700 !important;
+        }
+
+        .hero {
+            position: relative;
+            text-align: left;
+            color: white;
+            padding: 100px 20px;
+            background-image: url('[[@{/assets/background.png}]]') no-repeat center center;
+            background-size: cover;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .hero .btn-primary {
+            background-color: #ffd700;
+            border-color: #ffd700;
+            color: black;
+            font-size: 1.2rem;
+            padding: 10px 30px;
+        }
+
+        .hero .btn-primary:hover {
+            background-color: white;
+            color: black;
+        }
+
+        .features {
+            padding: 50px 20px;
+            background-color: white;
+            text-align: center;
+        }
+
+        .features h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+
+        .feature-item {
+            margin-bottom: 30px;
+        }
+
+        .feature-item img {
+            max-width: 100px;
+            margin-bottom: 15px;
+        }
+
+        .feature-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .feature-item p {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        footer a {
+            color: #ffd700;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
-
-<!-- <body th:style="'background: url(/assets/img/img.png) no-repeat center center fixed;'"> -->
-
-
-<!--<style th:inline="text">-->
-<!--    body{-->
-<!--        background: url([[@{/assets/img/img.png}]])-->
-<!--        no-repeat center center fixed;-->
-<!--    }-->
-<!--</style>-->
-
-
-<!-- Navigation -->
+<body>
+<!-- Panel nawigacyjny -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
     <div class="container">
-        <a class="navbar-brand" href="/">BDBT Spring Boot Project - Part II</a>
+        <a class="navbar-brand" href="/">Klub Lekkoatletyczny</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
                 aria-controls="navbarResponsive"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -30,65 +150,74 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
+                    <a class="nav-link" href="#">Home</a>
                 </li>
-
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/main}">Main</a>
                 </li>
-
-                <!-- Show "Login" if the user is not logged in -->
                 <li class="nav-item" th:if="${#httpServletRequest.remoteUser == null}">
                     <a class="nav-link" th:href="@{/login}">Login</a>
                 </li>
-
-                <!-- Show "You are logged in as <username>" if the user is logged in -->
                 <li class="nav-item" th:if="${#httpServletRequest.remoteUser != null}">
                     <a class="nav-link" th:inline="text" style="color:lightskyblue;">
                         You are logged in as <b style="text-transform:capitalize">[[${#httpServletRequest.remoteUser}]]</b>
                     </a>
                 </li>
-
-                <!-- Show "Logout" if the user is logged in -->
-
                 <li class="nav-item" th:if="${#httpServletRequest.remoteUser != null}">
-                    <form method="post" th:action="@{/index}">
-                    <button class="btn btn-primary" type="submit" onclick="successfullyLogout()" value="Sign Out">Logout</button>
+                    <form method="post" th:action="@{/index}" style="display: inline;">
+                        <button class="btn btn-primary btn-sm" type="submit">Logout</button>
                     </form>
                 </li>
-
-
             </ul>
         </div>
     </div>
 </nav>
 
-
-<!--Using images in page    -->
-<!-- <img th:src="@{/assets/img/img.png}" alt="Image" class="img-fluid"> -->
-
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-10 mt-5">
-
-            <label style="font-size:30px">Welcome to the home page!</label>
-            <div style="font-size:20px">If you want to login, click <a th:href="@{/main}"><b>here</b></a> or in the
-                upper right corner.
-            </div>
-
+<!-- Sekcja Hero -->
+<div class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Witamy w Klubie Lekkoatletycznym</h1>
+            <p>Dołącz do nas i zacznij swoją sportową przygodę!</p>
+            <a th:href="@{/login}" class="btn btn-primary">Zaloguj się</a>
         </div>
     </div>
 </div>
 
+<!-- Sekcja funkcji -->
+<div class="features">
+    <div class="container">
+        <h2>Nasze atuty</h2>
+        <div class="row">
+            <div class="col-md-4 feature-item">
+                <img src="/assets/bieg.png" alt="Dyscypliny">
+                <h3>Dyscypliny</h3>
+                <p>Oferujemy wiele dyscyplin, w tym biegi lekkoatletyczne, skoki i rzuty.</p>
+            </div>
+            <div class="col-md-4 feature-item">
+                <img src="/assets/sprzęt.png" alt="Wyposażenie">
+                <h3>Wyposażenie</h3>
+                <p>Nasze obiekty są wyposażone w profesjonalny sprzęt.</p>
+            </div>
+            <div class="col-md-4 feature-item">
+                <img src="/images/kadra.png" alt="Kadra">
+                <h3>Kadra Trenerska</h3>
+                <p>Nasza wykwalifikowana kadra trenerska to specjaliści
+                    z wieloletnim doświadczeniem, którzy pomogą Ci osiągnąć Twoje sportowe cele.</p>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Stopka -->
+<footer>
+    <p>&copy; 2025 Klub Lekkoatletyczny. Wszelkie prawa zastrzeżone. <a href="#">Polityka prywatności</a></p>
+</footer>
 
+<!-- Skrypty Bootstrap -->
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-
+</body>
 </html>
