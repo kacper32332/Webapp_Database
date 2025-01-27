@@ -48,12 +48,25 @@ public class AppController implements WebMvcConfigurer {
         return "redirect:/adresy";
     }
 
-    @RequestMapping("/edit/{nr_adresu}")
-    public ModelAndView showEditForm(@PathVariable(name = "nr_adresu") int nr_adresu) {
-        ModelAndView mav = new ModelAndView("edit_form");
-        Adresy adresy = AdresDAO.get(nr_adresu);
-        mav.addObject("adresy", adresy);
-        return mav;
+//    @RequestMapping("/edit/{nr_adresu}")
+//    public ModelAndView showEditForm(@PathVariable(name = "nr_adresu") int nr_adresu) {
+//        ModelAndView mav = new ModelAndView("edit_form");
+//        Adresy adresy = AdresDAO.get(nr_adresu);
+//        mav.addObject("adresy", adresy);
+//        return mav;
+//    }
+
+    @RequestMapping(value = "/editAdres", method = RequestMethod.POST)
+    public String editAdres(@ModelAttribute("adresy") Adresy adresy) {
+        Adresy istniejacyAdres = AdresDAO.get(adresy.getNr_adresu());
+        istniejacyAdres.setNr_adresu(adresy.getNr_adresu());
+        istniejacyAdres.setMiejscowosc(adresy.getMiejscowosc());
+        istniejacyAdres.setUlica(adresy.getUlica());
+        istniejacyAdres.setKod_pocztowy(adresy.getKod_pocztowy());
+        istniejacyAdres.setNr_domu(adresy.getNr_domu());
+        istniejacyAdres.setNr_mieszkania(adresy.getNr_mieszkania());
+        AdresDAO.update(istniejacyAdres);
+        return "redirect:/adresy";
     }
 
     @RequestMapping(value = "/getAdres/{id}", method = RequestMethod.GET)
@@ -63,25 +76,12 @@ public class AppController implements WebMvcConfigurer {
     }
 
 //    @RequestMapping(value = "/update", method = RequestMethod.POST)
-//    public String update(@ModelAttribute("adresy") Adresy adresy) {
-//        AdresDAO.update(adresy);
-//        return "redirect:/adresy";
-//    }
-
-//    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
 //    @ResponseBody
-//    public String update(@ModelAttribute("adresy") Adresy adresy) {
+//    public String update(@PathVariable("id") int id, @ModelAttribute("adresy") Adresy adresy) {
+//        adresy.setNr_adresu(id); // Ensure the ID is set in the object
 //        AdresDAO.update(adresy);
 //        return "redirect:/adresy";
 //    }
-
-    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
-    @ResponseBody
-    public String update(@PathVariable("id") int id, @ModelAttribute("adresy") Adresy adresy) {
-        adresy.setNr_adresu(id); // Ensure the ID is set in the object
-        AdresDAO.update(adresy);
-        return "redirect:/adresy";
-    }
 
     @RequestMapping("/delete/{nr_adresu}")
     public String delete(@PathVariable(name = "nr_adresu") int nr_adresu) {

@@ -167,7 +167,7 @@
       </div>
       <div class="modal-body">
         <form id="editEntryForm">
-          <input type="hidden" id="editId" name="id">
+          <input type="hidden" id="editNradresu" name="nr_adresu">
           <div class="form-group">
             <label for="editMiejscowosc">Miejscowość</label>
             <input type="text" class="form-control" id="editMiejscowosc" name="miejscowosc" maxlength="30">
@@ -229,8 +229,19 @@
         <td th:text="${Adres.nr_domu}">Nr domu</td>
         <td th:text="${Adres.nr_mieszkania}">Nr mieszkania</td>
         <td>
-          <a th:href="@{'/edit/' + ${Adres.nr_adresu}}" class="btn btn-primary btn-sm">Edytuj</a>
-          <a href="#" class="btn btn-primary btn-sm edit-button" th:data-id="${Adres.nr_adresu}">Edytuj</a>
+<!--          <a th:href="@{'/edit/' + ${Adres.nr_adresu}}" class="btn btn-primary btn-sm">Edytuj</a>-->
+<!--          <a href="#" class="btn btn-primary btn-sm edit-button" th:data-id="${Adres.nr_adresu}">Edytuj</a>-->
+          <button class="btn btn-primary btn-sm edit-button"
+                  th:data-nr-adresu="${Adres.nr_adresu}"
+                  th:data-miejscowosc="${Adres.miejscowosc}"
+                  th:data-ulica="${Adres.ulica}"
+                  th:data-kod-pocztowy="${Adres.kod_pocztowy}"
+                  th:data-nr-domu="${Adres.nr_domu}"
+                  th:data-nr-mieszkania="${Adres.nr_mieszkania}"
+                  data-toggle="modal"
+                  data-target="#editEntryModal">
+            Edytuj
+          </button>
           <a th:href="@{'/delete/' + ${Adres.nr_adresu}}" class="btn btn-danger btn-sm">Usuń</a>
         </td>
       </tr>
@@ -272,60 +283,41 @@
 </script>
 <script>
   $(document).ready(function() {
-    // Function to open the modal and populate it with the existing entry data
-    function openEditModal(entryId) {
-      // Fetch the entry data from the server using the entry ID
-      $.ajax({
-        url: `/getAdres/${entryId}`, // Replace with your backend endpoint
-        type: 'GET',
-        success: function(data) {
-          // Populate the form fields with the retrieved data
-          $('#editId').val(data.id); // Hidden field for the entry ID
-          $('#editMiejscowosc').val(data.miejscowosc);
-          $('#editUlica').val(data.ulica);
-          $('#editKodPocztowy').val(data.kod_pocztowy);
-          $('#editNrDomu').val(data.nr_domu);
-          $('#editNrMieszkania').val(data.nr_mieszkania);
+    $('.edit-button').on('click', function() {
+      const nr_adresu = $(this).data('nr-adresu');
+      const miejscowosc = $(this).data('miejscowosc');
+      const ulica = $(this).data('ulica');
+      const kod_pocztowy = $(this).data('kod-pocztowy');
+      const nr_domu = $(this).data('nr-domu');
+      const nr_mieszkania = $(this).data('nr-mieszkania');
 
-          // Show the modal
-          $('#editEntryModal').modal('show');
-        },
-        error: function(error) {
-          console.error('Error fetching entry data:', error);
-        }
-      });
-    }
-
-    // Attach the edit button click event dynamically
-    $(document).on('click', '.edit-button', function() {
-      const entryId = $(this).data('id'); // Get the ID of the entry from the button's data-id attribute
-      openEditModal(entryId); // Open the modal and populate it
+      $('#editNradresu').val(nr_adresu);
+      $('#editMiejscowosc').val(miejscowosc);
+      $('#editUlica').val(ulica);
+      $('#editKodPocztowy').val(kod_pocztowy);
+      $('#editNrDomu').val(nr_domu);
+      $('#editNrMieszkania').val(nr_mieszkania);
     });
 
-    // Handle form submission for editing
-    $('#editEntryForm').on('submit', function(event) {
+    $('#editEntryForm').on('submit', function (event) {
       event.preventDefault();
 
-      // Get CSRF token and header
-      var id = $('#editId').val(); // Assuming the form has a data-id attribute with the address ID
-      // const entryId = $('#editId').val(); // Retrieve the ID from the hidden field
       const csrfToken = $('meta[name="_csrf"]').attr('content');
       const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
 
-      // Send the updated data to the server
       $.ajax({
-        url: '/update/' + id, // Backend endpoint for updating entries
-        type: 'POST', // Or 'PUT', depending on your server setup
+        url: 'editAdres',
+        type: 'POST',
         data: $(this).serialize(),
-        beforeSend: function(xhr) {
+        beforeSend: function (xhr) {
           xhr.setRequestHeader(csrfHeader, csrfToken);
         },
-        success: function(response) {
-          $('#editEntryModal').modal('hide'); // Close the modal
-          location.reload(); // Reload the page to reflect the changes
+        success: function (response) {
+          $('#editEntryModal').modal('hide');
+          location.reload();
         },
-        error: function(error) {
-          console.error('Error updating entry:', error);
+        error: function (error) {
+          console.error('Error:', error);
         }
       });
     });
