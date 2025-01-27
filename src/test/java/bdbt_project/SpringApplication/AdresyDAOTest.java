@@ -36,7 +36,7 @@ public class AdresyDAOTest {
 
     @Test
     void testGet() {
-        int id = 43;
+        int id = 2;
         Adresy adresy = dao.get(id);
         System.out.println(adresy.toString());
     }
