@@ -363,6 +363,28 @@
     });
   });
 </script>
+<script>
+  $(document).ready(function () {
+    // Sort the table rows by "Nr adresu" ascending on page load
+    sortTable();
+
+    function sortTable() {
+      const rows = $('#addressTableBody tr').get();
+
+      // Sort rows by "Nr adresu" column (first column)
+      rows.sort(function (a, b) {
+        const nrA = parseInt($(a).find('td:eq(0)').text(), 10); // Nr adresu in column 0
+        const nrB = parseInt($(b).find('td:eq(0)').text(), 10);
+        return nrA - nrB; // Ascending order
+      });
+
+      // Append sorted rows back to the table body
+      $.each(rows, function (index, row) {
+        $('#addressTableBody').append(row);
+      });
+    }
+  });
+</script>
 
 
 </body>
