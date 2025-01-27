@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -20,6 +19,7 @@ public class AppController implements WebMvcConfigurer {
         registry.addViewController("/main").setViewName("main");
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/adresy").setViewName("adresy");
+        registry.addViewController("/dyscypliny").setViewName("dyscypliny");
 
         registry.addViewController("/main_admin").setViewName("admin/main_admin");
         registry.addViewController("/main_user").setViewName("user/main_user");
@@ -28,18 +28,13 @@ public class AppController implements WebMvcConfigurer {
     @Autowired
     private AdresyDAO AdresDAO;
 
+//    Adresy -----------------------------------------------------
+
     @RequestMapping("/adresy")
-    public String viewHomePage(Model model) {
+    public String viewAdresy(Model model) {
         List<Adresy> listAdresy = AdresDAO.list();
         model.addAttribute("listAdresy", listAdresy);
         return "adresy";
-    }
-
-    @RequestMapping("/new")
-    public String showNewForm(Model model) {
-        Adresy adresy = new Adresy();
-        model.addAttribute("adresy", adresy);
-        return "new_form";
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -61,17 +56,43 @@ public class AppController implements WebMvcConfigurer {
         return "redirect:/adresy";
     }
 
-    @RequestMapping(value = "/getAdres/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public Adresy getAdres(@PathVariable("id") int id) {
-        return AdresDAO.get(id);
-    }
-
-
-    @RequestMapping("/delete/{nr_adresu}")
+    @RequestMapping("/deleteA/{nr_adresu}")
     public String delete(@PathVariable(name = "nr_adresu") int nr_adresu) {
         AdresDAO.delete(nr_adresu);
         return "redirect:/adresy";
+    }
+
+    //    Dyscypliny -----------------------------------------------------
+    @Autowired
+    private DyscyplinyDAO DyscyplinaDAO;
+
+    @RequestMapping("/dyscypliny")
+    public String viewDyscypliny(Model model) {
+        List<Dyscypliny> listDyscypliny = DyscyplinaDAO.list();
+        model.addAttribute("listDyscypliny", listDyscypliny);
+        return "dyscypliny";
+    }
+
+    @RequestMapping(value = "/saveDyscyplina", method = RequestMethod.POST)
+    public String save(@ModelAttribute("dyscypliny") Dyscypliny dyscypliny) {
+        DyscyplinaDAO.save(dyscypliny);
+        return "redirect:/dyscypliny";
+    }
+
+    @RequestMapping(value = "/editDyscyplina", method = RequestMethod.POST)
+    public String editDyscyplina(@ModelAttribute("dyscypliny") Dyscypliny dyscypliny) {
+        Dyscypliny istniejacaDyscyplina = DyscyplinaDAO.get(dyscypliny.getNr_dyscypliny());
+        istniejacaDyscyplina.setNr_dyscypliny(dyscypliny.getNr_dyscypliny());
+        istniejacaDyscyplina.setNazwa_dyscypliny(dyscypliny.getNazwa_dyscypliny());
+        istniejacaDyscyplina.setOpis(dyscypliny.getOpis());
+        DyscyplinaDAO.update(istniejacaDyscyplina);
+        return "redirect:/dyscypliny";
+    }
+
+    @RequestMapping("/deleteD/{nr_dyscypliny}")
+    public String deleteD(@PathVariable(name = "nr_dyscypliny") int nr_dyscypliny) {
+        DyscyplinaDAO.delete(nr_dyscypliny);
+        return "redirect:/dyscypliny";
     }
 
     @Controller
