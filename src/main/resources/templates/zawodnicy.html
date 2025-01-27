@@ -1,0 +1,389 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <title>Zawodnicy</title>
+
+  <!-- Bootstrap CSS -->
+  <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css}"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+      padding-top: 56px; /* Space for fixed navbar */
+    }
+
+    h1 {
+      color: #007bff;
+      margin-bottom: 30px;
+    }
+
+    .navbar {
+      background-color: #343a40;
+      padding: 10px 20px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+      color: white !important;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .nav-link {
+      color: white !important;
+      font-size: 1rem;
+      margin: 0 10px;
+    }
+
+    .nav-link:hover {
+      color: #ffd700 !important;
+    }
+
+    .table {
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .table th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .table td, .table th {
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .btn-primary, .btn-danger {
+      font-size: 14px;
+      padding: 5px 10px;
+      margin: 2px;
+    }
+
+    .form-inline {
+      display: flex;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 1000px;
+    }
+
+    .add-button {
+      margin-bottom: 20px;
+    }
+
+    .logout-button {
+      border: none;
+      background: none;
+    }
+
+    .logout-button:hover {
+      text-decoration: underline;
+    }
+
+    #searchbar {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="/">Klub Lekkoatletyczny</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+            aria-controls="navbarResponsive"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Strona Główna <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/main}">Opcje</a>
+        </li>
+
+        <!-- Show "Login" if the user is not logged in -->
+        <li class="nav-item" th:if="${#httpServletRequest.remoteUser == null}">
+          <a class="nav-link" th:href="@{/login}">Logowanie</a>
+        </li>
+
+        <!-- Show "You are logged in as <username>" if the user is logged in -->
+        <li class="nav-item" th:if="${#httpServletRequest.remoteUser != null}">
+          <span class="nav-link text-light" th:inline="text">
+            Jesteś zalogowany jako <b style="text-transform:capitalize;">[[${#httpServletRequest.remoteUser}]]</b>
+          </span>
+        </li>
+
+        <!-- Show "Logout" if the user is logged in -->
+        <li class="nav-item" th:if="${#httpServletRequest.remoteUser != null}">
+          <form method="post" th:action="@{/index}" style="display: inline;">
+            <button class="btn btn-primary btn-sm" type="submit">Wyloguj się</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Add New Athlete Modal -->
+<div class="modal fade" id="addNewAthleteModal" tabindex="-1" role="dialog" aria-labelledby="addNewAthleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addNewAthleteModalLabel">Dodaj nowego zawodnika</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="addNewAthleteForm">
+          <div class="form-group">
+            <label for="imie">Imię</label>
+            <input type="text" class="form-control" id="imie" name="imie" maxlength="30" required>
+          </div>
+          <div class="form-group">
+            <label for="nazwisko">Nazwisko</label>
+            <input type="text" class="form-control" id="nazwisko" name="nazwisko" maxlength="30" required>
+          </div>
+          <div class="form-group">
+            <label for="data_urodzenia">Data urodzenia</label>
+            <input type="date" class="form-control" id="data_urodzenia" name="data_urodzenia" required>
+          </div>
+          <div class="form-group">
+            <label for="dyscyplina">Dyscyplina</label>
+            <input type="text" class="form-control" id="dyscyplina" name="dyscyplina" maxlength="50" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Zapisz</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Athlete Modal -->
+<div class="modal fade" id="editAthleteModal" tabindex="-1" role="dialog" aria-labelledby="editAthleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editAthleteModalLabel">Edytuj zawodnika</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editAthleteForm">
+          <input type="hidden" id="editAthleteId" name="id">
+          <div class="form-group">
+            <label for="editImie">Imię</label>
+            <input type="text" class="form-control" id="editImie" name="imie" maxlength="30" required>
+          </div>
+          <div class="form-group">
+            <label for="editNazwisko">Nazwisko</label>
+            <input type="text" class="form-control" id="editNazwisko" name="nazwisko" maxlength="30" required>
+          </div>
+          <div class="form-group">
+            <label for="editDataUrodzenia">Data urodzenia</label>
+            <input type="date" class="form-control" id="editDataUrodzenia" name="data_urodzenia" required>
+          </div>
+          <div class="form-group">
+            <label for="editDyscyplina">Dyscyplina</label>
+            <input type="text" class="form-control" id="editDyscyplina" name="dyscyplina" maxlength="50" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container text-center">
+  <br>
+  <h1>Zawodnicy</h1>
+
+  <!-- Add New Athlete Button -->
+  <a href="#" class="btn btn-success add-button" data-toggle="modal"
+     data-target="#addNewEntryModal">Dodaj nowego zawodnika</a>
+
+  <!-- Search Bar -->
+  <div class="form-group mt-4">
+    <input type="text" id="searchbar" class="form-control" placeholder="Szukaj w tabeli...">
+  </div>
+
+  <!-- Table -->
+  <div class="table-responsive mt-3">
+    <table class="table table-bordered">
+      <!-- Table header -->
+      <thead class="thead-dark">
+      <tr>
+        <th>Nr zawodnika</th>
+        <th>Imie</th>
+        <th>Nazwisko</th>
+        <th>Płeć</th>
+        <th>Email</th>
+        <th>Nr telefonu</th>
+        <th>Data urodzenia</th>
+        <th>Nr adresu</th>
+      </tr>
+      </thead>
+      <!-- Table body -->
+      <tbody id="addressTableBody">
+      <tr th:each="Zawodnik : ${listZawodnicy}">
+        <td th:text="${Zawodnik.nr_zawodnika}">ID</td>
+        <td th:text="${Zawodnik.imie}">Imie</td>
+        <td th:text="${Zawodnik.nazwisko}">Nazwisko</td>
+        <td th:text="${Zawodnik.plec}">Płeć</td>
+        <td th:text="${Zawodnik.email}">Email</td>
+        <td th:text="${Zawodnik.nr_telefonu}">Nr telefonu</td>
+        <td th:text="${Zawodnik.data_urodzenia}">Data urodzenia</td>
+        <td th:text="${Zawodnik.nr_adresu}">Nr adresu</td>
+        <td>
+          <button class="btn btn-primary btn-sm edit-button"
+                  th:data-nr-zawodnika="${Zawodnik.nr_zawodnika}"
+                  th:data-imie="${Zawodnik.imie}"
+                  th:data-nazwisko="${Zawodnik.nazwisko}"
+                  th:data-plec="${Zawodnik.plec}"
+                  th:data-email="${Zawodnik.email}"
+                  th:data-nr_telefonu="${Zawodnik.nr_telefonu}"
+                  th:data-data_urodzenia="${Zawodnik.data_urodzenia}"
+                  th:data-nr_adresu="${Zawodnik.nr_adresu}"
+
+
+                  data-toggle="modal"
+                  data-target="#editEntryModal">
+            Edytuj
+          </button>
+          <a th:href="@{'/deleteZawodnik/' + ${Zawodnik.nr_zawodnika}}" class="btn btn-danger btn-sm">Usuń</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script>
+  $(document).ready(function() {
+    $('#addNewEntryForm').on('submit', function(event) {
+      event.preventDefault();
+
+      // Get CSRF token from the meta tag
+      var csrfToken = $('meta[name="_csrf"]').attr('content');
+      var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
+      $.ajax({
+        url: '/saveZawodnik',
+        type: 'POST',
+        data: $(this).serialize(),
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader(csrfHeader, csrfToken);
+        },
+        success: function(response) {
+          $('#addNewEntryModal').modal('hide');
+          location.reload(); // Reload the page to see the new entry
+        },
+        error: function(error) {
+          console.error('Error:', error);
+        }
+      });
+    });
+  });
+</script>
+<script>
+  $(document).ready(function() {
+    $('.edit-button').on('click', function() {
+      const nr_zawodnika = $(this).data('nr-zawodnika');
+      const imie = $(this).data('imie');
+      const nazwisko = $(this).data('nazwisko');
+      const plec = $(this).data('plec');
+      const email = $(this).data('email');
+      const nr_telefonu = $(this).data('nr-telefonu');
+      const data_urodzenia = $(this).data('data_urodzenia');
+      const nr_adresu = $(this).data('nr-adresu');
+
+
+      $('#editNrZawodnika').val(nr_zawodnika);
+      $('#editImie').val(imie);
+      $('#editNazwisko').val(nazwisko);
+      $('#editPlec').val(plec);
+      $('#editEmail').val(email);
+      $('#editNrTelefonu').val(nr_telefonu);
+      $('#editDataUrodzenia').val(data_urodzenia);
+      $('#editNrAdresu').val(nr_adresu);
+    });
+
+    $('#editEntryForm').on('submit', function (event) {
+      event.preventDefault();
+
+      const csrfToken = $('meta[name="_csrf"]').attr('content');
+      const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
+      $.ajax({
+        url: 'editZawodnik',
+        type: 'POST',
+        data: $(this).serialize(),
+        beforeSend: function (xhr) {
+          xhr.setRequestHeader(csrfHeader, csrfToken);
+        },
+        success: function (response) {
+          $('#editEntryModal').modal('hide');
+          location.reload();
+        },
+        error: function (error) {
+          console.error('Error:', error);
+        }
+      });
+    });
+  });
+</script>
+<script>
+  $(document).ready(function () {
+    $('#searchbar').on('keyup', function () {
+      const searchTerm = $(this).val().toLowerCase();
+
+      $('#addressTableBody tr').filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(searchTerm) > -1);
+      });
+    });
+  });
+</script>
+<script>
+  $(document).ready(function () {
+    // Sort the table rows by "Nr adresu" ascending on page load
+    sortTable();
+
+    function sortTable() {
+      const rows = $('#addressTableBody tr').get();
+
+      // Sort rows by "Nr adresu" column (first column)
+      rows.sort(function (a, b) {
+        const nrA = parseInt($(a).find('td:eq(0)').text(), 10); // Nr adresu in column 0
+        const nrB = parseInt($(b).find('td:eq(0)').text(), 10);
+        return nrA - nrB; // Ascending order
+      });
+
+      // Append sorted rows back to the table body
+      $.each(rows, function (index, row) {
+        $('#addressTableBody').append(row);
+      });
+    }
+  });
+</script>
+
+
+</body>
+</html>

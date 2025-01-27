@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -72,6 +71,51 @@ public class AppController implements WebMvcConfigurer {
     public String delete(@PathVariable(name = "nr_adresu") int nr_adresu) {
         AdresDAO.delete(nr_adresu);
         return "redirect:/adresy";
+    }
+
+    @Autowired
+    private ZawodnicyDAO ZawodnikDAO;
+
+    @RequestMapping("/zawodnicy")
+    public String viewZawodnicyPage(Model model) {
+        List<Zawodnicy> listZawodnicy = ZawodnikDAO.list();
+        model.addAttribute("listZawodnicy", listZawodnicy);
+        return "zawodnicy";
+    }
+
+
+    @RequestMapping(value = "/saveZawodnik", method = RequestMethod.POST)
+    public String saveZawodnik(@ModelAttribute("zawodnicy") Zawodnicy zawodnicy) {
+        ZawodnikDAO.save(zawodnicy);
+        return "redirect:/zawodnicy";
+    }
+
+    @RequestMapping(value = "/editZawodnik", method = RequestMethod.POST)
+    public String editZawodnik(@ModelAttribute("zawodnicy") Zawodnicy zawodnicy) {
+        Zawodnicy istniejacyZawodnik = ZawodnikDAO.get(zawodnicy.getNr_zawodnika());
+        istniejacyZawodnik.setNr_zawodnika(zawodnicy.getNr_zawodnika());
+        istniejacyZawodnik.setImie(zawodnicy.getImie());
+        istniejacyZawodnik.setNazwisko(zawodnicy.getNazwisko());
+        istniejacyZawodnik.setPlec(zawodnicy.getPlec());
+        istniejacyZawodnik.setEmail(zawodnicy.getEmail());
+        istniejacyZawodnik.setNr_telefonu(zawodnicy.getNr_telefonu());
+        istniejacyZawodnik.setData_urodzenia(zawodnicy.getData_urodzenia());
+        istniejacyZawodnik.setNr_adresu(zawodnicy.getNr_adresu());
+        ZawodnikDAO.update(istniejacyZawodnik);
+        return "redirect:/zawodnicy";
+    }
+
+    @RequestMapping(value = "/getZawodnik/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Zawodnicy getZawodnik(@PathVariable("id") int id) {
+        return ZawodnikDAO.get(id);
+    }
+
+
+    @RequestMapping("/deleteZawodnik/{nr_zawodnika}")
+    public String deleteZawodnik(@PathVariable(name = "nr_zawodnika") int nr_zawodnika) {
+        ZawodnikDAO.delete(nr_zawodnika);
+        return "redirect:/zawodnicy";
     }
 
     @Controller
