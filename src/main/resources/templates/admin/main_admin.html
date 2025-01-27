@@ -1,9 +1,8 @@
 <!DOCTYPE HTML>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Main Admin Page</title>
-
+    <title>Panel Administratora</title>
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
     <style th:inline="text">
         body {
@@ -36,99 +35,42 @@
             color: #ffd700 !important;
         }
 
-        .hero {
-            position: relative;
-            text-align: left;
-            color: white;
-            padding: 100px 20px;
-            background-size: cover;
+        .admin-panel {
+            margin: 50px auto;
+            max-width: 800px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 600px;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: bold;
+        .admin-panel h1 {
+            font-size: 2rem;
             margin-bottom: 20px;
         }
 
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
+        .btn-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
         }
 
-        .hero .btn-primary {
-            background-color: #ffd700;
-            border-color: #ffd700;
-            color: black;
-            font-size: 1.2rem;
-            padding: 10px 30px;
-        }
-
-        .hero .btn-primary:hover {
-            background-color: white;
-            color: black;
-        }
-
-        .features {
-            padding: 50px 20px;
-            background-color: white;
-            text-align: center;
-        }
-
-        .features h2 {
-            font-size: 2.5rem;
-            margin-bottom: 30px;
-        }
-
-        .feature-item {
-            margin-bottom: 30px;
-        }
-
-        .feature-item img {
-            max-width: 100px;
-            margin-bottom: 15px;
-        }
-
-        .feature-item h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        .feature-item p {
-            font-size: 1rem;
-            color: #666;
-        }
-
-        footer {
-            background-color: #343a40;
+        .btn-admin {
+            display: inline-block;
+            background: #007bff;
             color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
             text-align: center;
-            padding: 20px 0;
-        }
-
-        footer a {
-            color: #ffd700;
+            font-size: 1rem;
             text-decoration: none;
+            transition: background 0.3s;
         }
 
-        footer a:hover {
-            text-decoration: underline;
+        .btn-admin:hover {
+            background: #0056b3;
         }
     </style>
 </head>
@@ -145,47 +87,36 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/index}">Strona Główna</a>
                 </li>
-
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Zarządzanie
+                    <a class="nav-link" href="#">Panel Administratora
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
-
                 <li class="nav-item">
                     <a class="nav-link" th:inline="text" style="color:lightskyblue;">Jesteś zalogowany jako <b
                             style="text-transform:capitalize">[[${#httpServletRequest.remoteUser}]]</b></a>
                 </li>
-
             </ul>
         </div>
     </div>
 </nav>
 
+<!-- Main Content -->
 <div class="container">
-    <div class="row">
-
-        <div class="col-md-10 mt-5">
-            <form method="post" th:action="@{/index}">
-                <div class="form-group">
-                    <label style="font-size:30px" th:inline="text">Witaj <a
-                            style="color:lightskyblue; text-transform:capitalize"><b>[[${#httpServletRequest.remoteUser}]]</b></a>
-                        na głównej stronie!</label>
-                    <div style="font-size:20px">Jeśli chcesz sie wylogować, kliknij guzik "Wyloguj się".</div>
-                </div>
-
-                <button class="btn btn-primary" type="submit" onclick="successfullyLogout()" value="Sign Out">Wyloguj się
-                </button>
-            </form>
+    <div class="admin-panel">
+        <h1>Panel Administratora</h1>
+        <p>Wybierz jedną z poniższych opcji:</p>
+        <div class="btn-container">
+            <a class="btn-admin" th:href="@{/adresy}">Adresy</a>
+            <a class="btn-admin" th:href="@{/pracownicy}">Pracownicy</a>
+            <a class="btn-admin" th:href="@{/zawodnicy}">Zawodnicy</a>
+            <a class="btn-admin" th:href="@{/obiekty}">Obiekty</a>
         </div>
-
     </div>
 </div>
-
 
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
