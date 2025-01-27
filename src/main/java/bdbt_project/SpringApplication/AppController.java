@@ -48,14 +48,6 @@ public class AppController implements WebMvcConfigurer {
         return "redirect:/adresy";
     }
 
-//    @RequestMapping("/edit/{nr_adresu}")
-//    public ModelAndView showEditForm(@PathVariable(name = "nr_adresu") int nr_adresu) {
-//        ModelAndView mav = new ModelAndView("edit_form");
-//        Adresy adresy = AdresDAO.get(nr_adresu);
-//        mav.addObject("adresy", adresy);
-//        return mav;
-//    }
-
     @RequestMapping(value = "/editAdres", method = RequestMethod.POST)
     public String editAdres(@ModelAttribute("adresy") Adresy adresy) {
         Adresy istniejacyAdres = AdresDAO.get(adresy.getNr_adresu());
@@ -75,13 +67,6 @@ public class AppController implements WebMvcConfigurer {
         return AdresDAO.get(id);
     }
 
-//    @RequestMapping(value = "/update", method = RequestMethod.POST)
-//    @ResponseBody
-//    public String update(@PathVariable("id") int id, @ModelAttribute("adresy") Adresy adresy) {
-//        adresy.setNr_adresu(id); // Ensure the ID is set in the object
-//        AdresDAO.update(adresy);
-//        return "redirect:/adresy";
-//    }
 
     @RequestMapping("/delete/{nr_adresu}")
     public String delete(@PathVariable(name = "nr_adresu") int nr_adresu) {
