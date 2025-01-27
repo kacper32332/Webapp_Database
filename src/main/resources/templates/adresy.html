@@ -69,6 +69,12 @@
     .logout-button:hover {
       text-decoration: underline;
     }
+
+    #searchbar {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 10px;
+    }
   </style>
 </head>
 <body>
@@ -197,15 +203,22 @@
   </div>
 </div>
 
+
 <div class="container text-center">
+  <br>
   <h1>Adresy</h1>
 
-<!--  <a href="/new" class="btn btn-success add-button">Dodaj nowy adres</a>-->
+  <!-- Add New Entry Button -->
   <a href="#" class="btn btn-success add-button" data-toggle="modal"
      data-target="#addNewEntryModal">Dodaj nowy adres</a>
 
+    <!-- Search Bar -->
+  <div class="form-group mt-4">
+    <input type="text" id="searchbar" class="form-control" placeholder="Szukaj w tabeli...">
+  </div>
+
   <!-- Table -->
-  <div class="table-responsive">
+  <div class="table-responsive mt-3">
     <table class="table table-bordered">
       <!-- Table header -->
       <thead class="thead-dark">
@@ -220,7 +233,7 @@
       </tr>
       </thead>
       <!-- Table body -->
-      <tbody>
+      <tbody id="addressTableBody">
       <tr th:each="Adres : ${listAdresy}">
         <td th:text="${Adres.nr_adresu}">ID</td>
         <td th:text="${Adres.miejscowosc}">Miejscowość</td>
@@ -229,8 +242,6 @@
         <td th:text="${Adres.nr_domu}">Nr domu</td>
         <td th:text="${Adres.nr_mieszkania}">Nr mieszkania</td>
         <td>
-<!--          <a th:href="@{'/edit/' + ${Adres.nr_adresu}}" class="btn btn-primary btn-sm">Edytuj</a>-->
-<!--          <a href="#" class="btn btn-primary btn-sm edit-button" th:data-id="${Adres.nr_adresu}">Edytuj</a>-->
           <button class="btn btn-primary btn-sm edit-button"
                   th:data-nr-adresu="${Adres.nr_adresu}"
                   th:data-miejscowosc="${Adres.miejscowosc}"
@@ -323,6 +334,18 @@
     });
   });
 </script>
+<script>
+  $(document).ready(function () {
+    $('#searchbar').on('keyup', function () {
+      const searchTerm = $(this).val().toLowerCase();
+
+      $('#addressTableBody tr').filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(searchTerm) > -1);
+      });
+    });
+  });
+</script>
+
 
 </body>
 </html>
