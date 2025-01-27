@@ -22,7 +22,25 @@
     }
 
     .navbar {
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background-color: #343a40;
+      padding: 10px 20px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+      color: white !important;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .nav-link {
+      color: white !important;
+      font-size: 1rem;
+      margin: 0 10px;
+    }
+
+    .nav-link:hover {
+      color: #ffd700 !important;
     }
 
     .table {
@@ -110,8 +128,8 @@
 
         <!-- Show "Logout" if the user is logged in -->
         <li class="nav-item" th:if="${#httpServletRequest.remoteUser != null}">
-          <form method="post" th:action="@{/logout}" class="form-inline">
-            <button class="logout-button text-light" type="submit">Wyloguj się</button>
+          <form method="post" th:action="@{/index}" style="display: inline;">
+            <button class="btn btn-primary btn-sm" type="submit">Wyloguj się</button>
           </form>
         </li>
       </ul>
