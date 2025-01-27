@@ -19,6 +19,7 @@ public class AppController implements WebMvcConfigurer {
         registry.addViewController("/main").setViewName("main");
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/adresy").setViewName("adresy");
+        registry.addViewController("/dyscypliny").setViewName("dyscypliny");
 
         registry.addViewController("/main_admin").setViewName("admin/main_admin");
         registry.addViewController("/main_user").setViewName("user/main_user");
@@ -27,18 +28,13 @@ public class AppController implements WebMvcConfigurer {
     @Autowired
     private AdresyDAO AdresDAO;
 
+//    Adresy -----------------------------------------------------
+
     @RequestMapping("/adresy")
-    public String viewHomePage(Model model) {
+    public String viewAdresy(Model model) {
         List<Adresy> listAdresy = AdresDAO.list();
         model.addAttribute("listAdresy", listAdresy);
         return "adresy";
-    }
-
-    @RequestMapping("/new")
-    public String showNewForm(Model model) {
-        Adresy adresy = new Adresy();
-        model.addAttribute("adresy", adresy);
-        return "new_form";
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -60,62 +56,43 @@ public class AppController implements WebMvcConfigurer {
         return "redirect:/adresy";
     }
 
-    @RequestMapping(value = "/getAdres/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public Adresy getAdres(@PathVariable("id") int id) {
-        return AdresDAO.get(id);
-    }
-
-
-    @RequestMapping("/delete/{nr_adresu}")
+    @RequestMapping("/deleteA/{nr_adresu}")
     public String delete(@PathVariable(name = "nr_adresu") int nr_adresu) {
         AdresDAO.delete(nr_adresu);
         return "redirect:/adresy";
     }
 
+    //    Dyscypliny -----------------------------------------------------
     @Autowired
-    private ZawodnicyDAO ZawodnikDAO;
+    private DyscyplinyDAO DyscyplinaDAO;
 
-    @RequestMapping("/zawodnicy")
-    public String viewZawodnicyPage(Model model) {
-        List<Zawodnicy> listZawodnicy = ZawodnikDAO.list();
-        model.addAttribute("listZawodnicy", listZawodnicy);
-        return "zawodnicy";
+    @RequestMapping("/dyscypliny")
+    public String viewDyscypliny(Model model) {
+        List<Dyscypliny> listDyscypliny = DyscyplinaDAO.list();
+        model.addAttribute("listDyscypliny", listDyscypliny);
+        return "dyscypliny";
     }
 
-
-    @RequestMapping(value = "/saveZawodnik", method = RequestMethod.POST)
-    public String saveZawodnik(@ModelAttribute("zawodnicy") Zawodnicy zawodnicy) {
-        ZawodnikDAO.save(zawodnicy);
-        return "redirect:/zawodnicy";
+    @RequestMapping(value = "/saveDyscyplina", method = RequestMethod.POST)
+    public String save(@ModelAttribute("dyscypliny") Dyscypliny dyscypliny) {
+        DyscyplinaDAO.save(dyscypliny);
+        return "redirect:/dyscypliny";
     }
 
-    @RequestMapping(value = "/editZawodnik", method = RequestMethod.POST)
-    public String editZawodnik(@ModelAttribute("zawodnicy") Zawodnicy zawodnicy) {
-        Zawodnicy istniejacyZawodnik = ZawodnikDAO.get(zawodnicy.getNr_zawodnika());
-        istniejacyZawodnik.setNr_zawodnika(zawodnicy.getNr_zawodnika());
-        istniejacyZawodnik.setImie(zawodnicy.getImie());
-        istniejacyZawodnik.setNazwisko(zawodnicy.getNazwisko());
-        istniejacyZawodnik.setPlec(zawodnicy.getPlec());
-        istniejacyZawodnik.setEmail(zawodnicy.getEmail());
-        istniejacyZawodnik.setNr_telefonu(zawodnicy.getNr_telefonu());
-        istniejacyZawodnik.setData_urodzenia(zawodnicy.getData_urodzenia());
-        istniejacyZawodnik.setNr_adresu(zawodnicy.getNr_adresu());
-        ZawodnikDAO.update(istniejacyZawodnik);
-        return "redirect:/zawodnicy";
+    @RequestMapping(value = "/editDyscyplina", method = RequestMethod.POST)
+    public String editDyscyplina(@ModelAttribute("dyscypliny") Dyscypliny dyscypliny) {
+        Dyscypliny istniejacaDyscyplina = DyscyplinaDAO.get(dyscypliny.getNr_dyscypliny());
+        istniejacaDyscyplina.setNr_dyscypliny(dyscypliny.getNr_dyscypliny());
+        istniejacaDyscyplina.setNazwa_dyscypliny(dyscypliny.getNazwa_dyscypliny());
+        istniejacaDyscyplina.setOpis(dyscypliny.getOpis());
+        DyscyplinaDAO.update(istniejacaDyscyplina);
+        return "redirect:/dyscypliny";
     }
 
-    @RequestMapping(value = "/getZawodnik/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public Zawodnicy getZawodnik(@PathVariable("id") int id) {
-        return ZawodnikDAO.get(id);
-    }
-
-
-    @RequestMapping("/deleteZawodnik/{nr_zawodnika}")
-    public String deleteZawodnik(@PathVariable(name = "nr_zawodnika") int nr_zawodnika) {
-        ZawodnikDAO.delete(nr_zawodnika);
-        return "redirect:/zawodnicy";
+    @RequestMapping("/deleteD/{nr_dyscypliny}")
+    public String deleteD(@PathVariable(name = "nr_dyscypliny") int nr_dyscypliny) {
+        DyscyplinaDAO.delete(nr_dyscypliny);
+        return "redirect:/dyscypliny";
     }
 
     @Controller
