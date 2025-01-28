@@ -20,6 +20,8 @@ public class AppController implements WebMvcConfigurer {
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/adresy").setViewName("adresy");
         registry.addViewController("/dyscypliny").setViewName("dyscypliny");
+        registry.addViewController("/zawodnicy").setViewName("zawodnicy");
+        registry.addViewController("/zajecia").setViewName("zajecia");
 
         registry.addViewController("/main_admin").setViewName("admin/main_admin");
         registry.addViewController("/main_user").setViewName("user/main_user");
@@ -93,6 +95,76 @@ public class AppController implements WebMvcConfigurer {
     public String deleteD(@PathVariable(name = "nr_dyscypliny") int nr_dyscypliny) {
         DyscyplinaDAO.delete(nr_dyscypliny);
         return "redirect:/dyscypliny";
+    }
+
+    //    Zawodnicy -----------------------------------------------------
+    @Autowired
+    private ZawodnicyDAO ZawodnikDAO;
+
+    @RequestMapping("/zawodnicy")
+    public String viewZawodnicy(Model model) {
+        List<Zawodnicy> listZawodnicy = ZawodnikDAO.list();
+        model.addAttribute("listZawodnicy", listZawodnicy);
+        return "zawodnicy";
+    }
+
+    @RequestMapping(value = "/saveZawodnik", method = RequestMethod.POST)
+    public String save(@ModelAttribute("zawodnicy") Zawodnicy zawodnicy) {
+        ZawodnikDAO.save(zawodnicy);
+        return "redirect:/zawodnicy";
+    }
+
+    @RequestMapping(value = "/editZawodnik", method = RequestMethod.POST)
+    public String editZawodnik(@ModelAttribute("zawodnicy") Zawodnicy zawodnicy) {
+        Zawodnicy istniejacyZawodnik = ZawodnikDAO.get(zawodnicy.getNr_zawodnika());
+        istniejacyZawodnik.setNr_zawodnika(zawodnicy.getNr_zawodnika());
+        istniejacyZawodnik.setImie(zawodnicy.getImie());
+        istniejacyZawodnik.setNazwisko(zawodnicy.getNazwisko());
+        ZawodnikDAO.update(istniejacyZawodnik);
+        return "redirect:/zawodnicy";
+    }
+
+    @RequestMapping("/deleteZ/{nr_zawodnika}")
+    public String deleteZ(@PathVariable(name = "nr_zawodnika") int nr_zawodnika) {
+        ZawodnikDAO.delete(nr_zawodnika);
+        return "redirect:/zawodnicy";
+    }
+
+    //    Zajecia -----------------------------------------------------
+    @Autowired
+    private ZajeciaDAO zajeciaDAO;
+
+    @RequestMapping("/zajecia")
+    public String viewZajecia(Model model) {
+        List<Zajecia> listZajecia = zajeciaDAO.list();
+        model.addAttribute("listZajecia", listZajecia);
+        return "zajecia";
+    }
+
+    @RequestMapping(value = "/saveZajecia", method = RequestMethod.POST)
+    public String save(@ModelAttribute("zajecia") Zajecia zajecia) {
+        zajeciaDAO.save(zajecia);
+        return "redirect:/zajecia";
+    }
+
+    @RequestMapping(value = "/editZajecia", method = RequestMethod.POST)
+    public String editZajecia(@ModelAttribute("zajecia") Zajecia zajecia) {
+        Zajecia istniejaceZajecia = zajeciaDAO.get(zajecia.getNr_zajec());
+        istniejaceZajecia.setNr_zajec(zajecia.getNr_zajec());
+        istniejaceZajecia.setNazwa_zajec(zajecia.getNazwa_zajec());
+        istniejaceZajecia.setLimit_miejsc(zajecia.getLimit_miejsc());
+        istniejaceZajecia.setCzas_trwania(zajecia.getCzas_trwania());
+        istniejaceZajecia.setData_rozpoczecia(zajecia.getData_rozpoczecia());
+        istniejaceZajecia.setData_zakonczenia(zajecia.getData_zakonczenia());
+        istniejaceZajecia.setNr_dyscypliny(zajecia.getNr_dyscypliny());
+        zajeciaDAO.update(istniejaceZajecia);
+        return "redirect:/zawodnicy";
+    }
+
+    @RequestMapping("/deleteZa/{nr_zajec}")
+    public String deleteZa(@PathVariable(name = "nr_zajec") int nr_zajec) {
+        zajeciaDAO.delete(nr_zajec);
+        return "redirect:/zajecia";
     }
 
     @Controller

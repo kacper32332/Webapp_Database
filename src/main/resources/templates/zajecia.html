@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="_csrf" th:content="${_csrf.token}"/>
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-  <title>Zawodnicy</title>
+  <title>Zajecia</title>
 
   <!-- Bootstrap CSS -->
   <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css}"/>
@@ -137,33 +137,41 @@
   </div>
 </nav>
 
-<!-- Add New Athlete Modal -->
-<div class="modal fade" id="addNewAthleteModal" tabindex="-1" role="dialog" aria-labelledby="addNewAthleteModalLabel" aria-hidden="true">
+<!-- Add New Entry Modal -->
+<div class="modal fade" id="addNewEntryModal" tabindex="-1" role="dialog" aria-labelledby="addNewEntryModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addNewAthleteModalLabel">Dodaj nowego zawodnika</h5>
+        <h5 class="modal-title" id="addNewEntryModalLabel">Dodaj nowe zajęcia</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form id="addNewAthleteForm">
+        <form id="addNewEntryForm">
           <div class="form-group">
-            <label for="imie">Imię</label>
-            <input type="text" class="form-control" id="imie" name="imie" maxlength="30" required>
+            <label for="nazwa_zajec">Nazwa Zajęć</label>
+            <input type="text" class="form-control" id="nazwa_zajec" name="nazwa_zajec"  maxlength="30">
           </div>
           <div class="form-group">
-            <label for="nazwisko">Nazwisko</label>
-            <input type="text" class="form-control" id="nazwisko" name="nazwisko" maxlength="30" required>
+            <label for="limit_miejsc">Limit miejsc</label>
+            <input type="text" class="form-control" id="limit_miejsc" name="limit_miejsc" maxlength="20" required>
           </div>
           <div class="form-group">
-            <label for="data_urodzenia">Data urodzenia</label>
-            <input type="date" class="form-control" id="data_urodzenia" name="data_urodzenia" required>
+            <label for="czas_trwania">Czas trwania</label>
+            <input type="text" class="form-control" id="czas_trwania" name="czas_trwania" maxlength="20" required>
           </div>
           <div class="form-group">
-            <label for="dyscyplina">Dyscyplina</label>
-            <input type="text" class="form-control" id="dyscyplina" name="dyscyplina" maxlength="50" required>
+            <label for="data_rozpoczecia">Data rozpoczęcia</label>
+            <input type="date" class="form-control" id="data_rozpoczecia" name="data_rozpoczecia" maxlength="20" required>
+          </div>
+          <div class="form-group">
+            <label for="data_zakonczenia">Data zakończenie</label>
+            <input type="date" class="form-control" id="data_zakonczenia" name="data_zakonczenia" maxlength="20" required>
+          </div>
+          <div class="form-group">
+            <label for="nr_dyscypliny">Nr dyscypliny</label>
+            <input type="text" class="form-control" id="nr_dyscypliny" name="nr_dyscypliny" maxlength="20" required>
           </div>
           <button type="submit" class="btn btn-primary">Zapisz</button>
         </form>
@@ -172,34 +180,42 @@
   </div>
 </div>
 
-<!-- Edit Athlete Modal -->
-<div class="modal fade" id="editAthleteModal" tabindex="-1" role="dialog" aria-labelledby="editAthleteModalLabel" aria-hidden="true">
+<!-- Edit Entry Modal -->
+<div class="modal fade" id="editEntryModal" tabindex="-1" role="dialog" aria-labelledby="editEntryModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editAthleteModalLabel">Edytuj zawodnika</h5>
+        <h5 class="modal-title" id="editEntryModalLabel">Edytuj dyscyplinę</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form id="editAthleteForm">
-          <input type="hidden" id="editAthleteId" name="id">
+        <form id="editEntryForm">
+          <input type="hidden" id="editnrzajec" name="nr_zajec">
           <div class="form-group">
-            <label for="editImie">Imię</label>
-            <input type="text" class="form-control" id="editImie" name="imie" maxlength="30" required>
+            <label for="editnazwa_zajec">Nazwa zajęć</label>
+            <input type="text" class="form-control" id="editnazwa_zajec" name="editnazwa_zajec" maxlength="30">
           </div>
           <div class="form-group">
-            <label for="editNazwisko">Nazwisko</label>
-            <input type="text" class="form-control" id="editNazwisko" name="nazwisko" maxlength="30" required>
+            <label for="editlimit_miejsc">Limit miejsc</label>
+            <input type="text" class="form-control" id="editlimit_miejsc" name="limit_miejsc" maxlength="30">
           </div>
           <div class="form-group">
-            <label for="editDataUrodzenia">Data urodzenia</label>
-            <input type="date" class="form-control" id="editDataUrodzenia" name="data_urodzenia" required>
+            <label for="editczas_trwania">Czas trwania</label>
+            <input type="text" class="form-control" id="editczas_trwania" name="czas_trwania" maxlength="200" required>
           </div>
           <div class="form-group">
-            <label for="editDyscyplina">Dyscyplina</label>
-            <input type="text" class="form-control" id="editDyscyplina" name="dyscyplina" maxlength="50" required>
+            <label for="editdata_rozpoczecia">data rozpoczecia</label>
+            <input type="date" class="form-control" id="editdata_rozpoczecia" name="data_rozpoczecia" maxlength="200" required>
+          </div>
+          <div class="form-group">
+            <label for="editdata_zakonczenia">data zakonczenia</label>
+            <input type="date" class="form-control" id="editdata_zakonczenia" name="data_zakonczenia" maxlength="200" required>
+          </div>
+          <div class="form-group">
+            <label for="editnr_dyscypliny">nr dyscypliny</label>
+            <input type="text" class="form-control" id="editnr_dyscypliny" name="nr_dyscypliny" maxlength="200" required>
           </div>
           <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
         </form>
@@ -208,13 +224,14 @@
   </div>
 </div>
 
+
 <div class="container text-center">
   <br>
-  <h1>Zawodnicy</h1>
+  <h1>Zajęcia</h1>
 
-  <!-- Add New Athlete Button -->
+  <!-- Add New Entry Button -->
   <a href="#" class="btn btn-success add-button" data-toggle="modal"
-     data-target="#addNewEntryModal">Dodaj nowego zawodnika</a>
+     data-target="#addNewEntryModal">Dodaj nowe zajęcia</a>
 
   <!-- Search Bar -->
   <div class="form-group mt-4">
@@ -227,45 +244,40 @@
       <!-- Table header -->
       <thead class="thead-dark">
       <tr>
-        <th>Nr zawodnika</th>
-        <th>Imie</th>
-        <th>Nazwisko</th>
-        <th>Płeć</th>
-        <th>Email</th>
-        <th>Nr telefonu</th>
-        <th>Data urodzenia</th>
-        <th>Nr adresu</th>
+        <th>Nr zajęć</th>
+        <th>Nazwa zajęć</th>
+        <th>Limit miejsc</th>
+        <th>Czas trwania</th>
+        <th>Data rozpoczecia</th>
+        <th>Data zakonczenia</th>
+        <th>Nr dyscypliny</th>
         <th>Akcje</th>
       </tr>
       </thead>
       <!-- Table body -->
       <tbody id="addressTableBody">
-      <tr th:each="Zawodnik : ${listZawodnicy}">
-        <td th:text="${Zawodnik.nr_zawodnika}">ID</td>
-        <td th:text="${Zawodnik.imie}">Imie</td>
-        <td th:text="${Zawodnik.nazwisko}">Nazwisko</td>
-        <td th:text="${Zawodnik.plec}">Płeć</td>
-        <td th:text="${Zawodnik.email}">Email</td>
-        <td th:text="${Zawodnik.nr_telefonu}">Nr telefonu</td>
-        <td th:text="${Zawodnik.data_urodzenia}">Data urodzenia</td>
-        <td th:text="${Zawodnik.nr_adresu}">Nr adresu</td>
+      <tr th:each="Zajecia : ${listZajecia}">
+        <td th:text="${Zajecia.nr_zajec}">ID</td>
+        <td th:text="${Zajecia.nazwa_zajec}">Nazwa dyscypliny</td>
+        <td th:text="${Zajecia.limit_miejsc}">Opis</td>
+        <td th:text="${Zajecia.czas_trwania}">Opis</td>
+        <td th:text="${Zajecia.data_rozpoczecia}">Opis</td>
+        <td th:text="${Zajecia.data_zakonczenia}">Opis</td>
+        <td th:text="${Zajecia.nr_dyscypliny}">Opis</td>
         <td>
           <button class="btn btn-primary btn-sm edit-button"
-                  th:data-nr-zawodnika="${Zawodnik.nr_zawodnika}"
-                  th:data-imie="${Zawodnik.imie}"
-                  th:data-nazwisko="${Zawodnik.nazwisko}"
-                  th:data-plec="${Zawodnik.plec}"
-                  th:data-email="${Zawodnik.email}"
-                  th:data-nr_telefonu="${Zawodnik.nr_telefonu}"
-                  th:data-data_urodzenia="${Zawodnik.data_urodzenia}"
-                  th:data-nr_adresu="${Zawodnik.nr_adresu}"
-
-
+                  th:data-nr-zajec="${Zajecia.nr_zajec}"
+                  th:data-nazwa-zajec="${Zajecia.nazwa_zajec}"
+                  th:data-limit-miejsc="${Zajecia.limit_miejsc}"
+                  th:data-czas-trwania="${Zajecia.czas_trwania}"
+                  th:data-data-rozpoczecia="${Zajecia.data_rozpoczecia}"
+                  th:data-data-zakonczenia="${Zajecia.data_zakonczenia}"
+                  th:data-nr-dyscypliny="${Zajecia.nr_dyscypliny}"
                   data-toggle="modal"
                   data-target="#editEntryModal">
             Edytuj
           </button>
-          <a th:href="@{'/deleteZawodnik/' + ${Zawodnik.nr_zawodnika}}" class="btn btn-danger btn-sm">Usuń</a>
+          <a th:href="@{'/deleteZa/' + ${Zajecia.nr_zajec}}" class="btn btn-danger btn-sm">Usuń</a>
         </td>
       </tr>
       </tbody>
@@ -287,7 +299,7 @@
       var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
 
       $.ajax({
-        url: '/saveZawodnik',
+        url: '/saveZajecia',
         type: 'POST',
         data: $(this).serialize(),
         beforeSend: function(xhr) {
@@ -307,24 +319,21 @@
 <script>
   $(document).ready(function() {
     $('.edit-button').on('click', function() {
-      const nr_zawodnika = $(this).data('nr-zawodnika');
-      const imie = $(this).data('imie');
-      const nazwisko = $(this).data('nazwisko');
-      const plec = $(this).data('plec');
-      const email = $(this).data('email');
-      const nr_telefonu = $(this).data('nr-telefonu');
-      const data_urodzenia = $(this).data('data_urodzenia');
-      const nr_adresu = $(this).data('nr-adresu');
+      const nr_zajec = $(this).data('nr-zajec');
+      const nazwa_zajec = $(this).data('nazwa-zajec');
+      const limit_miejsc = $(this).data('limit-miejsc');
+      const czas_trwania = $(this).data('czas-trwania');
+      const data_rozpoczecia = $(this).data('data-rozpoczecia');
+      const data_zakonczenia = $(this).data('data-zakonczenia');
+      const nr_dyscypliny = $(this).data('nr-dyscypliny');
 
-
-      $('#editNrZawodnika').val(nr_zawodnika);
-      $('#editImie').val(imie);
-      $('#editNazwisko').val(nazwisko);
-      $('#editPlec').val(plec);
-      $('#editEmail').val(email);
-      $('#editNrTelefonu').val(nr_telefonu);
-      $('#editDataUrodzenia').val(data_urodzenia);
-      $('#editNrAdresu').val(nr_adresu);
+      $('#editnrzajec').val(nr_zajec);
+      $('#editnazwa_zajec').val(nazwa_zajec);
+      $('#editlimit_miejsc').val(limit_miejsc);
+      $('#editczas_trwania').val(czas_trwania);
+      $('#editdata_rozpoczecia').val(data_rozpoczecia);
+      $('#editdata_zakonczenia').val(data_zakonczenia);
+      $('#editnr_dyscypliny').val(nr_dyscypliny);
     });
 
     $('#editEntryForm').on('submit', function (event) {
@@ -334,7 +343,7 @@
       const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
 
       $.ajax({
-        url: 'editZawodnik',
+        url: 'editZajecia',
         type: 'POST',
         data: $(this).serialize(),
         beforeSend: function (xhr) {
@@ -364,15 +373,13 @@
 </script>
 <script>
   $(document).ready(function () {
-    // Sort the table rows by "Nr adresu" ascending on page load
     sortTable();
 
     function sortTable() {
       const rows = $('#addressTableBody tr').get();
 
-      // Sort rows by "Nr adresu" column (first column)
       rows.sort(function (a, b) {
-        const nrA = parseInt($(a).find('td:eq(0)').text(), 10); // Nr adresu in column 0
+        const nrA = parseInt($(a).find('td:eq(0)').text(), 10);
         const nrB = parseInt($(b).find('td:eq(0)').text(), 10);
         return nrA - nrB; // Ascending order
       });
